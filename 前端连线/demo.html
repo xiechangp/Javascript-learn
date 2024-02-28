@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>连线动画效果</title>
+  <style>
+    .container {
+      position: relative;
+      width: 200px;
+      height: 500px;
+      border: 1px solid #eee;
+    }
+
+    .box {
+      width: 20px;
+      height: 20px;
+      background-color: #f0f0f0;
+      position: absolute;
+    }
+
+    .start { top: 300px; left: 20px; }
+    .end { top: 50px; left: 150px; }
+
+    .end-animation {
+    animation: blink 1s infinite alternate;
+    }
+
+    @keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+    }
+
+    .line {
+      position: absolute;
+      border: 1px solid #0376ff; /* 使用虚线 */
+      height: 0;
+      transition: height 1s, top 1s;
+    }
+
+    .line2 {
+      position: absolute;
+      border: 1px solid #0376ff; /* 使用虚线 */
+      width: 0;
+      transition: width 1s, top 1s;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="box start"></div>
+    <div class="box end"></div>
+    <div class="line"></div>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      var startBox = document.querySelector('.start');
+      var endBox = document.querySelector('.end');
+      var line = document.querySelector('.line');
+
+      var startRect = startBox.getBoundingClientRect();
+      var endRect = endBox.getBoundingClientRect();
+
+      var startTop = startRect.top + (startRect.height / 2) - 20;
+      var startLeft = startRect.left + (startRect.width / 2) - 10;
+      var endTop = endRect.top + (endRect.height / 2) - 10;
+      var endLeft = endRect.left + (endRect.width / 2);
+
+      line.style.left = startLeft + 'px';
+      line.style.top = startTop + 'px';
+
+      setTimeout(() => {
+        line.style.height =  startTop - endTop + 'px';
+        line.style.top = endTop + 'px';
+
+        setTimeout(() => {
+          var line2 = document.createElement('div');
+          line2.classList.add('line2');
+          line2.style.left = startLeft + 'px';
+          line2.style.top = endTop + 'px';
+          document.querySelector('.container').appendChild(line2);
+
+          setTimeout(() => {
+            line2.style.width = endLeft - startLeft - 20 + 'px';
+            
+            setTimeout(() => {
+                endBox.classList.add('end-animation')
+                setTimeout(() => {
+                    line2.style.width = 0;
+
+                    setTimeout(() => {
+                        line.style.top = startTop + 'px';
+                        line.style.height = 0;
+                    },1000)
+                }, 1000)
+            }, 800);
+          }, 800);
+        }, 1000);
+
+      }, 1000);
+    });
+  </script>
+</body>
+
+</html>

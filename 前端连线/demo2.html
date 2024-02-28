@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        position: relative;
+        margin: 0 auto;
+        width: 200px;
+        height: 500px;
+        border: #eee 1px solid;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .box {
+        width: 20px;
+        height: 20px;
+        border: 1px solid;
+        margin: 10px;
+      }
+      .start {
+        position: absolute;
+        border: 1px solid #eee;
+        bottom: 0;
+        left: -50px;
+      }
+      .line {
+        position: absolute;
+        border: 1px solid #0376ff; /* 使用虚线 */
+        height: 0;
+        transition: height 1s, top 1s;
+      }
+      .line2 {
+        position: absolute;
+        border: 1px solid #0376ff; /* 使用虚线 */
+        width: 0;
+        transition: width 1s, top 1s;
+      }
+      .end-animation {
+        animation: blink 1s infinite alternate;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex">
+      <div class="container">
+        <div class="box cude-1">
+          <div style="width: 100%;height: 100%; background-color: #0376ff; display: none;"></div>
+        </div>
+        <div class="box cude-2"></div>
+        <div class="box cude-3"></div>
+        <div class="box cude-4"></div>
+        <div class="box cude-5"></div>
+        <div class="box cude-6"></div>
+        <div class="box cude-7"></div>
+        <div class="line"></div>
+        <div class="box start"></div>
+      </div>
+    </div>
+
+    <script>
+      window.addEventListener("load", () => {
+        var startBox = document.querySelector(".start");
+        var colorBox = document.querySelector(".cude-1 > div");
+        var endBox = document.querySelector(".cude-6");
+        var line = document.querySelector(".line");
+
+        var startRect = startBox.getBoundingClientRect();
+        var endRect = endBox.getBoundingClientRect();
+
+        var startTop = startRect.top + startRect.height / 2 - 20; // 计算 start 与 end y轴的偏移量
+        var startLeft = startRect.left + startRect.width / 2 - 10;
+        // var startLeft = startRect.right - endRect.right + 20;  // 计算 start 与 end x轴的偏移量
+        var endTop = endRect.top + endRect.height / 2 - 10;
+        var endLeft = endRect.left + endRect.width / 2;
+
+        // var distance = Math.trunc((startLeft - endLeft) / 2) + "px"
+        // var distance = (startLeft - endLeft) / 2 + "px";
+        // var distance = (endLeft - startLeft) / 2 + "px";
+        var distance = -30 + 'px';
+
+        // console.log(startLeft,endLeft);
+        // console.log(distance);
+      
+        line.style.left = distance;
+        line.style.top = startTop + "px";
+
+        setTimeout(() => {
+          line.style.height = startTop - endTop + "px";
+          line.style.top = endTop + "px";
+
+          setTimeout(() => {
+            var line2 = document.createElement("div");
+            line2.classList.add("line2");
+            line2.style.left = distance;
+            line2.style.top = endTop + "px";
+            document.querySelector(".container").appendChild(line2);
+
+            setTimeout(() => {
+              line2.style.width = endLeft - startLeft - 20 + 'px'
+
+              setTimeout(() => {
+                endBox.classList.add("end-animation");
+                setTimeout(() => {
+                  endBox.classList.remove("end-animation")
+                  line2.style.width = 0;
+                  console.log(colorBox);
+                  colorBox.style.display = 'block'
+
+                  setTimeout(() => {
+                    line.style.top = startTop + "px";
+                    line.style.height = 0;
+                  }, 1000);
+                }, 5000);
+              }, 800);
+            }, 800);
+          }, 1000);
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

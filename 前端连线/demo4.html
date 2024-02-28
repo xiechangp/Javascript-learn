@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .container {
+        /* width: 1000px; 每行放置100个，总宽度为1000px */
+        display: flex;
+        /* margin: 5px; */
+      }
+      .box {
+        border: 1px solid #eee;
+        margin: 10px;
+        display: flex;
+         flex-wrap: wrap;
+         /* width: calc(10px * 5px + 10px * 5px); */
+         min-width: 81px;
+         max-width: 81px;
+         position: relative;
+      }
+      .item {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background-color: #ccc;
+        margin: 2px; /* 设置间距为2px */
+        border: 1px solid #000; /* 添加边框 */
+      }
+      /* .container {
+        position: relative;
+        margin: 0 auto;
+        width: 200px;
+        height: 500px;
+        border: #eee 1px solid;
+        display: flex;
+        flex-wrap: wrap;
+      } */
+      /* .box {
+        width: 20px;
+        height: 20px;
+        border: 1px solid;
+        margin: 10px;
+      } */
+      .start {
+        position: absolute;
+        border: 1px solid #eee;
+        bottom: 0;
+        left: -15px;
+        width: 10px;
+        height: 10px;
+      }
+      .line {
+        position: absolute;
+        border: 1px solid #0376ff; /* 使用虚线 */
+        height: 0;
+        transition: height 1s, top 1s;
+      }
+      .line2 {
+        position: absolute;
+        border: 1px solid #0376ff; /* 使用虚线 */
+        width: 0;
+        transition: width 1s, top 1s;
+      }
+      .end-animation {
+        animation: blink 1s infinite alternate;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="container"></div>
+
+    <script>
+      const container = document.getElementById("container");
+      let shelfNumber = 1;
+      for (let i = 0; i < 20; i++) {
+        const box = document.createElement("div");
+        box.className = "box";
+        container.appendChild(box);
+
+        for (let j = 0; j < 100; j++) {
+          const item = document.createElement("div");
+          item.className = "item";
+          item.classList.add(`item${j}`);
+          box.appendChild(item);
+        }
+      }
+      const box2 = document.querySelector(".box:nth-of-type(2)")
+      const  start = document.createElement("div");
+      start.classList.add(`start`);
+      box2.appendChild(start)
+      const  line = document.createElement("div");
+      line.classList.add(`line`);
+      box2.appendChild(line)
+
+      window.addEventListener("load", () => {
+        var startBox = document.querySelector(".box:nth-of-type(2) .start");
+        // var colorBox = document.querySelector(".cude-1 > div");
+        var endBox = document.querySelector(".box:nth-of-type(2) > .item58");
+        var line = document.querySelector(".line");
+        var startRect = startBox.getBoundingClientRect();
+        var endRect = endBox.getBoundingClientRect();
+
+        var startTop = startRect.top + startRect.height / 2 - 25; // 计算 start 与 end y轴的偏移量
+        var startLeft = startRect.left + startRect.width / 2 - 10;
+        // var startLeft = startRect.right - endRect.right + 20;  // 计算 start 与 end x轴的偏移量
+        var endTop = endRect.top + endRect.height / 2 - 20;
+        var endLeft = endRect.left + endRect.width / 2 + 5;
+
+        // var distance = Math.trunc((startLeft - endLeft) / 2) + "px"
+        // var distance = (startLeft - endLeft) / 2 + "px";
+        // var distance = (endLeft - startLeft) / 2 + "px";
+        var distance = -10 + 'px';
+
+        // console.log(startLeft,endLeft);
+        // console.log(distance);
+      
+        line.style.left = distance;
+        line.style.top = startTop + "px";
+
+        setTimeout(() => {
+          line.style.height = startTop - endTop + "px";
+          line.style.top = endTop + "px";
+
+          setTimeout(() => {
+            var line2 = document.createElement("div");
+            line2.classList.add("line2");
+            line2.style.left = distance;
+            line2.style.top = endTop + "px";
+            document.querySelector(".box:nth-of-type(2)").appendChild(line2);
+
+            setTimeout(() => {
+              line2.style.width = endLeft - startLeft - 20 + 'px'
+
+              setTimeout(() => {
+                endBox.classList.add("end-animation");
+                setTimeout(() => {
+                  endBox.classList.remove("end-animation")
+                  line2.style.width = 0;
+                //   console.log(colorBox);
+                //   colorBox.style.display = 'block'
+
+                  setTimeout(() => {
+                    line.style.top = startTop + "px";
+                    line.style.height = 0;
+                  }, 1000);
+                }, 5000);
+              }, 800);
+            }, 800);
+          }, 1000);
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>
